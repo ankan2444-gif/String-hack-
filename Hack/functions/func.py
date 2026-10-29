@@ -32,6 +32,7 @@ def exception_handler(e, hack_name):
 
 
 
+
 async def str_checker(strses):
     bot = None
 
@@ -40,19 +41,13 @@ async def str_checker(strses):
             strses,
             env.API_ID,
             env.API_HASH,
-            parse_mode=html,
         )
 
         await bot.connect()
-
         info = await bot.get_me()
 
-        if not info:
-            print("SESSION CHECK: Account information unavailable.")
-            return False
-
-        if info.bot:
-            print("SESSION CHECK: Bot account detected.")
+        if not info or info.bot:
+            print("SESSION CHECK: Invalid user session or bot account.")
             return False
 
         print("SESSION CHECK: Valid user account.")
@@ -70,12 +65,8 @@ async def str_checker(strses):
             try:
                 if bot.is_connected():
                     await bot.disconnect()
-            except Exception as e:
-                print(
-                    f"SESSION DISCONNECT ERROR: "
-                    f"{type(e).__name__}: {e}"
-                )
-
+            except Exception:
+                pass
 
 async def check_string(x):
     yy = await x.send_message(
