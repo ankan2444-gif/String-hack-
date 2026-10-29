@@ -1,4 +1,3 @@
-
 import asyncio
 import random
 import html
@@ -98,25 +97,34 @@ async def _play_intro(message):
 
 
 def _welcome_text(user):
+    # Get the full name from the Telegram user object
     full_name = " ".join(
-        part for part in [user.first_name, user.last_name] if part
+        part for part in [
+            getattr(user, "first_name", None),
+            getattr(user, "last_name", None),
+        ] if part
     ) or "User"
 
-    name = (
-        f'<a href="tg://user?id={user.id}">'
-        f'{html.escape(full_name)}</a>'
-    )
+    user_id = getattr(user, "id", None)
+
+    if user_id:
+        name = (
+            f'<a href="tg://user?id={user_id}">'
+            f'{html.escape(full_name)}</a>'
+        )
+    else:
+        name = html.escape(full_name)
 
     return (
         "<blockquote><b>"
-        f"<emoji id=6177168011175138815>💎</emoji> ʜєʏ {name} ! "
+        "<emoji id=6177168011175138815>💎</emoji> ʜєʏ " + name + " ! "
         "<emoji id=6294262456185265300>😽</emoji>\n\n"
         "<emoji id=5978869985299142389>🦋</emoji> ᴡєʟᴄσϻє ᴛσ "
         "<b>𝐒ᴛʀɪɴɢ 𝐇ᴀᴄᴋ ꭙ 𝐁ᴏᴛ ⚡</b> "
         "<emoji id=6073117703965511893>💐</emoji>\n"
         "ᴘʀєϻɪυϻ • ғαѕᴛ • ѕϻσσᴛʜ\n\n"
         "<emoji id=5411472846645914012>🎁</emoji> "
-        "α ᴘσωєʀғυʟ ʜαᴄᴋɪɴɢ ᴛσσʟ ʙσᴛ ғσʀ ᴛєʟєɢʀαϻ\n\n"
+        "α ᴘσωєʀғυʟ ʜαᴄᴋɪηɢ ᴛσσʟ ʙσᴛ ғσʀ ᴛєʟєɢʀαϻ\n\n"
         "<emoji id=4956250031741993892>⚡</emoji> ɪηѕᴛαηᴛ ʀєѕᴘσηѕє\n"
         "<emoji id=4956371914323920049>🔄</emoji> ѕϻσσᴛʜ ᴘєʀғσʀϻαηᴄє\n"
         "<emoji id=4958479549265347295>🚀</emoji> ғαѕᴛ &amp; ѕмαʀᴛ\n"
@@ -129,18 +137,18 @@ def _welcome_text(user):
         "</b></blockquote>"
     )
 
+
 @bot.on(events.NewMessage(pattern=r"^/start(?:\s|$)"))
 async def start(event):
     user_id = event.sender_id
     sender = await event.get_sender()
-    first_name = sender.first_name or "User"
 
     # Reaction and animation
     await _play_intro(event.message)
 
-
     # Welcome message with spoiler photo
-    welcome = _welcome_text(first_name)
+    # FIX: Pass the complete Telegram user object, not a string.
+    welcome = _welcome_text(sender)
 
     try:
         await bot.send_file(
@@ -151,7 +159,10 @@ async def start(event):
             spoiler=True,
         )
     except Exception:
-        await event.reply(welcome, parse_mode="html")
+        await event.reply(
+            welcome,
+            parse_mode="html",
+        )
 
     # Add user to database
     if DB:
@@ -160,21 +171,28 @@ async def start(event):
         except Exception:
             pass
 
-
         # Log new user
         if env.LOG_GROUP_ID:
             try:
-                user = await event.get_sender()
-                username_str = f"@{user.username}" if user.username else "None"
-                user_mention = f'<a href="tg://user?id={user.id}">{html.escape(user.first_name or "User")}</a>'
+                user = sender
+                username_str = (
+                    f"@{user.username}" if user.username else "None"
+                )
+
+                user_mention = (
+                    f'<a href="tg://user?id={user.id}">'
+                    f'{html.escape(user.first_name or "User")}</a>'
+                )
 
                 await bot.send_message(
                     env.LOG_GROUP_ID,
                     (
-                        f"<blockquote>📝 <b>ʜᴀᴄᴋ ʙᴏᴛ sᴛᴀʀᴛᴇᴅ ɪɴ ᴘʀɪᴠᴀᴛᴇ</b>\n\n"
+                        "<blockquote>📝 "
+                        "<b>ʜᴀᴄᴋ ʙᴏᴛ sᴛᴀʀᴛᴇᴅ ɪɴ ᴘʀɪᴠᴀᴛᴇ</b>\n\n"
                         f"👤 <b>ᴜsᴇʀ ɴᴀᴍᴇ :</b> {user_mention}\n"
                         f"🍂 <b>ᴜsᴇʀ ɪᴅ :</b> <code>{user.id}</code>\n"
-                        f"🔐 <b>ᴜsᴇʀɴᴀᴍᴇ :</b> {html.escape(username_str)}</blockquote>"
+                        f"🔐 <b>ᴜsᴇʀɴᴀᴍᴇ :</b> "
+                        f"{html.escape(username_str)}</blockquote>"
                     ),
                     parse_mode="html",
                 )
