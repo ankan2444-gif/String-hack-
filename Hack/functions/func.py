@@ -175,18 +175,33 @@ async def get_dialogs(strses, group=False, channel=False, user=False):
         # Hack 'A'
 
 
+
 async def userchannels(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         channels = await bot(PC())
         result = ""
+
         for index, x in enumerate(channels.chats):
             try:
-                result += f'<blockquote><b>{index+1}. ᴄʜαηηєʟ ηαмє ~ {x.title} ᴄʜαηηєʟ υѕєʀηαмє ~ @{x.username}</b></blockquote>\n\n'
-            except:
-                pass
+                username = f"@{x.username}" if x.username else "Private"
+                result += (
+                    f"<blockquote><b>{index + 1}. "
+                    f"ᴄʜαηηєʟ ηαмє ~ {x.title} "
+                    f"ᴄʜαηηєʟ υѕєʀηαмє ~ {username}"
+                    f"</b></blockquote>\n\n"
+                )
+            except Exception:
+                continue
+
         if result:
-            result += '\n\n<blockquote><b>ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>'
+            result += (
+                "\n\n<blockquote><b>"
+                "ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ"
+                "</b></blockquote>"
+            )
+
         return result
+
 
         # Hack 'B'
 
@@ -273,11 +288,15 @@ async def joingroup(strses, username):
                 return exception_handler(e, "JOIN CHAT/GROUP")
                 # Hack 'F'
 
+
 async def leavegroup(strses, username):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             await bot(leave(username))
-            return "<blockquote><b>ℓєαᴠє∂ ᴛʜє ᴄʜαηηєℓ/ɢʀσυᴘ.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            return (
+                "<blockquote><b>ℓєαᴠє∂ ᴛʜє ᴄʜαηηєʟ/ɢʀσυᴘ.\n\n"
+                "ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            )
         except Exception as e:
             return exception_handler(e, "LEAVE CHAT/GROUP")
             # Hack 'G'
@@ -293,13 +312,23 @@ async def delgroup(strses, username):
             # Hack 'H'
 
 
+
 async def user2fa(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         result = await bot(functions.account.GetPasswordRequest())
+
         if result.has_password:
-            return "<blockquote><b>ѕσʀʀʏ, υѕєʀ ʜαѕ αℓʀєα∂ʏ ѕєᴛ υᴘ ᴛᴡσ-ѕᴛєᴘ ᴠєʀɪғɪᴄαᴛɪση.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            return (
+                "<blockquote><b>ѕσʀʀʏ, υѕєʀ ʜαѕ αℓʀєα∂ʏ "
+                "ѕєᴛ υᴘ ᴛᴡσ-ѕᴛєᴘ ᴠєʀɪғɪᴄαᴛɪση.\n\n"
+                "ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            )
         else:
-            return "<blockquote><b>υѕєʀ ʜαѕη'ᴛ ѕєᴛ υᴘ ᴛᴡσ-ѕᴛєᴘ ᴠєʀɪғɪᴄαᴛɪση.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            return (
+                "<blockquote><b>υѕєʀ ʜαѕη'ᴛ ѕᴇᴛ υᴘ "
+                "ᴛᴡσ-ѕᴛєᴘ ᴠєʀɪғɪᴄαᴛɪση.\n\n"
+                "ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            )
             # Hack 'I'
 
 
@@ -383,7 +412,7 @@ async def get_members(strses, grp_id):
 
 
 async def invite_all(strses, from_grp, to_grp, x):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             msg = await x.send_message("<blockquote><b>ᴘʀσᴄєѕѕɪηɢ......</b></blockquote>", parse_mode="html")
             add = 0
@@ -416,17 +445,32 @@ async def invite_all(strses, from_grp, to_grp, x):
             # Hack 'O' and 'P'
 
 
+
 async def edit_admin(strses, x, promote=False, demote=False, chat_id=None, user_id=None):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             chat = await bot.get_entity(chat_id)
-            if promote:
-                await bot(EditAdminRequest(chat_id, user_id, chat.admin_rights, 'Admin'))
-                return '<blockquote><b>υѕєʀ ᴘʀσмσᴛє∂ ѕυᴄᴄєѕѕғυʟʟʏ\n\nᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ.</b></blockquote>'
 
+            if promote:
+                await bot(
+                    EditAdminRequest(
+                        chat_id,
+                        user_id,
+                        chat.admin_rights,
+                        "Admin"
+                    )
+                )
+                return (
+                    "<blockquote><b>υѕєʀ ᴘʀσмσᴛє∂ ѕυᴄᴄєѕѕғυʟʟʏ\n\n"
+                    "ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ.</b></blockquote>"
+                )
             else:
                 await bot.edit_admin(chat, user_id, is_admin=False)
-                return '<blockquote><b>υѕєʀ ∂ємσᴛє∂ ѕυᴄᴄєѕѕғυʟʟʏ\n\nᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ.</b></blockquote>'
+                return (
+                    "<blockquote><b>υѕєʀ ∂ємσᴛє∂ ѕυᴄᴄєѕѕғυʟʟʏ\n\n"
+                    "ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ.</b></blockquote>"
+                )
+
         except Exception as e:
-            name = 'DEMOTE' if demote else 'PROMOTE'
+            name = "DEMOTE" if demote else "PROMOTE"
             return exception_handler(e, name)
