@@ -146,36 +146,86 @@ def paste(text):
     return link + hash
 
 
+
 def on_callback(data=None):
     def dec(func):
         async def wrap(e):
-            check = await join_checker(e)
-            if not check:
-                return
-
-            if func.__name__ in DISABLED:
-                await e.answer("This function is currently disabled", alert=True)
-                return
+            # Answer the callback promptly to reduce expired-query errors.
             try:
+                await e.answer()
+            except errors.QueryIdInvalidError:
+                return
+            except Exception as callback_error:
+                LOGGER(__name__).warning(
+                    "Callback answer failed: %s",
+                    type(callback_error).__name__,
+                )
+
+            try:
+                check = await join_checker(e)
+                if not check:
+                    return
+
+                if func.__name__ in DISABLED:
+                    await e.answer(
+                        "This function is currently disabled",
+                        alert=True,
+                    )
+                    return
+
                 await func(e)
+
             except errors.common.AlreadyInConversationError:
-                pass
+                try:
+                    await e.answer(
+                        "A conversation is already active. Finish it first.",
+                        alert=True,
+                    )
+                except Exception:
+                    pass
+
             except (asyncio.CancelledError, UserIsBlockedError):
                 return
+
             except Exception as err:
-                ERROR_TXT = f'ERROR MESSAGE:- {err}'
-                ERROR_TXT += f'\n\nERROR TRACEBACK:- {format_exc()}'
+                error_text = (
+                    f"Callback: {func.__name__}\n"
+                    f"Error: {type(err).__name__}: {err}\n\n"
+                    f"{format_exc()}"
+                )
+
+                LOGGER(__name__).error(error_text)
+
+                # Do not send session strings, tokens, or API credentials
+                # to third-party paste services.
                 if LOG_GROUP_ID:
                     try:
-                        link = paste(ERROR_TXT)
-                        await bot.send_message(LOG_GROUP_ID, link, link_preview=False)
-                    except:
-                        pass
-                else:
-                    LOGGER(__name__).error(ERROR_TXT)
-                await e.reply('<blockquote><b>ѕσмє єʀʀσʀ σᴄᴄυʀ ғʀσм вσᴛ ѕɪ∂є. ᴘʟєαѕє ʀєᴘσʀᴛ ɪᴛ ᴛσ @MASTIWITHFRIENDSXD</b></blockquote>', parse_mode="html")
+                        await bot.send_message(
+                            LOG_GROUP_ID,
+                            "<blockquote><b>Callback error occurred. "
+                            "Check the VPS logs for details.</b></blockquote>",
+                            parse_mode="html",
+                        )
+                    except Exception as log_error:
+                        LOGGER(__name__).warning(
+                            "Could not send error notice: %s",
+                            type(log_error).__name__,
+                        )
+
+                try:
+                    await e.respond(
+                        "<blockquote><b>ѕσмє єʀʀσʀ σᴄᴄυʀʀє∂. "
+                        "ᴘʟєαѕє ᴄʜєᴄκ ᴛʜє ʙσᴛ ℓσɢѕ.</b></blockquote>",
+                        parse_mode="html",
+                    )
+                except Exception as reply_error:
+                    LOGGER(__name__).warning(
+                        "Could not send error reply: %s",
+                        type(reply_error).__name__,
+                    )
 
         bot.add_event_handler(wrap, CallbackQuery(data=data))
+        return wrap
 
     return dec
 
