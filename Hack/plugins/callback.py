@@ -1,3 +1,4 @@
+
 import os
 import re
 
@@ -33,9 +34,9 @@ from Hack.functions import (
 @bot.on(events.CallbackQuery(data=re.compile(r'next|back')))
 async def _edit(e):
     if e.data == b'next':
-        await e.edit(MENU2, buttons=KEYBOARD2)
+        await e.edit(MENU2, buttons=KEYBOARD2, parse_mode="html")
     else:
-        await e.edit(MENU1, buttons=KEYBOARD1)
+        await e.edit(MENU1, buttons=KEYBOARD1, parse_mode="html")
 
 
 # Main Hack Funcs
@@ -48,7 +49,10 @@ async def a(e):
             return
         channels = await userchannels(string)
         if len(channels) == 0:
-            await x.send_message("There is no channel created by this user\n\nThanks For using this bot")
+            await x.send_message(
+                "<blockquote><b>ησ ᴄʜαηηєʟ ᴄʀєαᴛє∂ вʏ ᴛʜɪѕ υѕєʀ\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>",
+                parse_mode="html"
+            )
         elif len(channels) > 2000:
             file_name = f"{e.chat_id}_session.txt"
             with open(file_name, "w") as f:
@@ -56,7 +60,10 @@ async def a(e):
             await bot.send_file(e.chat_id, file_name)
             os.system(f"rm -rf {file_name}")
         else:
-            await x.send_message(channels + "\n\nThanks For using this bot")
+            await x.send_message(
+                channels + "\n\n<blockquote><b>ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>",
+                parse_mode="html"
+            )
 
 
 @on_callback(data='B')
@@ -66,7 +73,7 @@ async def b(e):
         if not string:
             return
         info = await userinfo(string)
-        await x.send_message(info)
+        await x.send_message(info, parse_mode="html")
 
 
 @on_callback(data='C')
@@ -81,7 +88,7 @@ async def c(e):
             return
 
         result = await ban_all(string, grp_id, x)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='D')
@@ -91,7 +98,7 @@ async def d(e):
         if not string:
             return
         result = await otp_searcher(string)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='E')
@@ -101,11 +108,13 @@ async def e(e):
         if not string:
             return
         grp_name = await ask_id(
-            x, text='Please send Group/Channel Username or Invite Link')
+            x,
+            text="<blockquote><b>ᴘʟєαѕє ѕєη∂ ɢʀσυᴘ/ᴄʜαηηєʟ υѕєʀηαмє σʀ ɪηᴠɪᴛє ℓɪηκ</b></blockquote>"
+        )
         if not grp_name:
             return
         result = await joingroup(string, grp_name)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='F')
@@ -115,11 +124,13 @@ async def f(e):
         if not string:
             return
         grp_name = await ask_id(
-            x, text='Please send Group/Channel Username or ID')
+            x,
+            text="<blockquote><b>ᴘʟєαѕє ѕєη∂ ɢʀσυᴘ/ᴄʜαηηєʟ υѕєʀηαмє σʀ ɪᴅ</b></blockquote>"
+        )
         if not grp_name:
             return
         result = await leavegroup(string, grp_name)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='G')
@@ -132,7 +143,7 @@ async def g(e):
         if not grp_name:
             return
         result = await delgroup(string, grp_name)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='H')
@@ -142,7 +153,7 @@ async def h(e):
         if not string:
             return
         result = await user2fa(string)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='I')
@@ -152,7 +163,7 @@ async def i(e):
         if not string:
             return
         result = await terminate(string)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='J')
@@ -162,7 +173,7 @@ async def j(e):
         if not string:
             return
         result = await delacc(string)
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
 
 
 @on_callback(data='K')
@@ -172,18 +183,31 @@ async def k(e):
         if not string:
             return
         dialogs = await get_dialogs(string, group=True, channel=True)
-        text = f"**Total Group/Channel: __{len(dialogs)}__\nExpected Time: __{len(dialogs)*1.5}__ seconds**"
-        msg = await x.send_message(text)
-        result = "**Successfully Left: __{}__\nRemaining Chats: __{}__**\n\nThanks For Using This Bot"
+        text = (
+            f"<blockquote><b>ᴛσᴛαʟ ɢʀσυᴘ/ᴄʜαηηєʟ: <u>{len(dialogs)}</u>\n"
+            f"єхᴘєᴄᴛє∂ ᴛɪмє: <u>{len(dialogs)*1.5}</u> ѕєᴄση∂ѕ</b></blockquote>"
+        )
+        msg = await x.send_message(text, parse_mode="html")
+        result = (
+            "<blockquote><b>ѕυᴄᴄєѕѕғυʟʟʏ ℓєғᴛ: <u>{}</u>\n"
+            "ʀємαɪηɪηɢ ᴄʜαᴛѕ: <u>{}</u>\n\n"
+            "ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
+        )
         left = await leave_all(string, dialogs=dialogs)
-        await msg.edit(result.format(left, len(dialogs) - left))
+        await msg.edit(
+            result.format(left, len(dialogs) - left),
+            parse_mode="html"
+        )
 
 
 @on_callback(data='L')
 async def l(e):
     async with bot.conversation(e.chat_id) as x:
-        await x.send_message("Choose the Broadcast Type",
-                             buttons=BROADCAST_BUTTONS)
+        await x.send_message(
+            "<blockquote><b>ᴄʜσσѕє ᴛʜє вʀσα∂ᴄαѕᴛ ᴛʏᴘє</b></blockquote>",
+            buttons=BROADCAST_BUTTONS,
+            parse_mode="html"
+        )
 
 
 @on_callback(data=re.compile(r'[123]'))
@@ -197,11 +221,21 @@ async def _123(e):
             return
         params = BROADCAST_OPTION.get(e.data)
         dialogs = await get_dialogs(string, **params)
-        TEXT = f"**Total Chats: __{len(dialogs)}__\nExpected Time: __{len(dialogs)*2}__ seconds**"
-        MSG = "**Successfull Chats: __{}__\nChats Failed: __{}__**\n\nThanks For Using This Bot"
-        await x.send_message(TEXT)
+        TEXT = (
+            f"<blockquote><b>ᴛσᴛαʟ ᴄʜαᴛѕ: <u>{len(dialogs)}</u>\n"
+            f"єхᴘєᴄᴛє∂ ᴛɪмє: <u>{len(dialogs)*2}</u> ѕєᴄση∂ѕ</b></blockquote>"
+        )
+        MSG = (
+            "<blockquote><b>ѕυᴄᴄєѕѕғυʟ ᴄʜαᴛѕ: <u>{}</u>\n"
+            "ᴄʜαᴛѕ ғαɪʟє∂: <u>{}</u>\n\n"
+            "ᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
+        )
+        await x.send_message(TEXT, parse_mode="html")
         sent = await broadcast(string, ids=dialogs, msg=broadcast_msg)
-        await x.send_message(MSG.format(sent, len(dialogs) - sent))
+        await x.send_message(
+            MSG.format(sent, len(dialogs) - sent),
+            parse_mode="html"
+        )
 
 
 @on_callback(data='M')
@@ -213,8 +247,13 @@ async def m(e):
         result = await logout(string)
         if not result:
             return await x.send_message(
-                "Logout Failed\n\nThanks For Using This Bot")
-        await x.send_message("Logging Out\n\nThanks For Using This Bot")
+                "<blockquote><b>ℓσɢσυᴛ ғαɪℓє∂\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>",
+                parse_mode="html"
+            )
+        await x.send_message(
+            "<blockquote><b>ℓσɢɢɪηɢ συᴛ\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>",
+            parse_mode="html"
+        )
 
 
 @on_callback(data='N')
@@ -224,12 +263,16 @@ async def n(e):
         if not string:
             return
         from_grp = await ask_id(
-            x, text='Please Send The Group Id You Want Scrap From')
+            x,
+            text="<blockquote><b>ᴘʟєαѕє ѕєη∂ ᴛʜє ɢʀσυᴘ ɪᴅ ᴛσ ѕᴄʀαρ ғʀσм</b></blockquote>"
+        )
         if not from_grp:
             return
 
         to_grp = await ask_id(
-            x, text='Please Send The Group Id You Want Scrap To')
+            x,
+            text="<blockquote><b>ᴘʟєαѕє ѕєη∂ ᴛʜє ᴛαʀɢєᴛ ɢʀσυᴘ ɪᴅ</b></blockquote>"
+        )
         if not to_grp:
             return
         await invite_all(string, from_grp, to_grp, x)
@@ -246,13 +289,21 @@ async def o(e):
         if not chat_id:
             return
 
-        user_id = await ask_id(x, text='Please send the user id/username')
+        user_id = await ask_id(
+            x,
+            text="<blockquote><b>ᴘʟєαѕє ѕєη∂ ᴛʜє υѕєʀ ɪᴅ/υѕєʀηαмє</b></blockquote>"
+        )
         if not user_id:
             return
 
         if e.data == b'O':
-            result = await edit_admin(string, x, demote=True, chat_id=chat_id, user_id=user_id)
+            result = await edit_admin(
+                string, x, demote=True, chat_id=chat_id, user_id=user_id
+            )
         else:
-            result = await edit_admin(string, x, promote=True, chat_id=chat_id, user_id=user_id)
+            result = await edit_admin(
+                string, x, promote=True, chat_id=chat_id, user_id=user_id
+            )
 
-        await x.send_message(result)
+        await x.send_message(result, parse_mode="html")
+        
