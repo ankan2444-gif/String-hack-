@@ -31,21 +31,50 @@ def exception_handler(e, hack_name):
     # String Validater and Checker
 
 
+
 async def str_checker(strses):
+    bot = None
+
     try:
-        bot = tg(strses, env.API_ID, env.API_HASH, parse_mode=html)
+        bot = tg(
+            strses,
+            env.API_ID,
+            env.API_HASH,
+            parse_mode=html,
+        )
+
         await bot.connect()
+
         info = await bot.get_me()
-        if info.bot:
+
+        if not info:
+            print("SESSION CHECK: Account information unavailable.")
             return False
-        try:
-            await bot(join('@lynx_madara'))
-        except:
-            pass
-        await bot.disconnect()
+
+        if info.bot:
+            print("SESSION CHECK: Bot account detected.")
+            return False
+
+        print("SESSION CHECK: Valid user account.")
         return True
-    except Exception:
+
+    except Exception as e:
+        print(
+            f"SESSION CHECK ERROR: "
+            f"{type(e).__name__}: {e}"
+        )
         return False
+
+    finally:
+        if bot is not None:
+            try:
+                if bot.is_connected():
+                    await bot.disconnect()
+            except Exception as e:
+                print(
+                    f"SESSION DISCONNECT ERROR: "
+                    f"{type(e).__name__}: {e}"
+                )
 
 
 async def check_string(x):
@@ -53,37 +82,56 @@ async def check_string(x):
         "<blockquote><b>ɢɪᴠє ѕᴛʀɪηɢ ѕєѕѕɪση</b></blockquote>",
         parse_mode="html",
     )
+
     try:
         xx = await x.get_response(timeout=300)
-        await yy.delete()
     except terror:
+        try:
+            await yy.delete()
+        except Exception:
+            pass
+
         await x.send_message(
             "<blockquote><b>ᴛɪмє єхᴄєє∂є∂</b></blockquote>",
             parse_mode="html",
         )
         return False
 
-    await xx.delete()
-    strses = validate_session(xx.text)
+    try:
+        await yy.delete()
+    except Exception:
+        pass
 
-    if strses:
-        op = await str_checker(strses)
-        if op:
-            return strses
-        else:
-            await x.send_message(
-                "<blockquote><b>єɪᴛʜєʀ ѕᴛʀɪηɢ ɪѕ ᴛєʀмɪηαᴛє∂ σʀ ʏσυ αʀє υѕɪηɢ вσᴛ ѕᴛʀɪηɢ</b></blockquote>",
-                parse_mode="html",
-            )
-            return False
-    else:
+    try:
+        strses = validate_session(xx.text or "")
+    except Exception as e:
+        print(f"SESSION FORMAT ERROR: {type(e).__name__}: {e}")
+        strses = None
+
+    try:
+        await xx.delete()
+    except Exception:
+        pass
+
+    if not strses:
         await x.send_message(
             "<blockquote><b>ѕᴛʀɪηɢ ѕєѕѕɪση ғσʀмαᴛ ɪѕ ωʀσηɢ</b></blockquote>",
             parse_mode="html",
         )
         return False
 
-        # Chat id/Username Func
+    op = await str_checker(strses)
+
+    if op:
+        return strses
+
+    await x.send_message(
+        "<blockquote><b>ѕᴇssɪση ᴠᴇʀɪғɪᴄαᴛɪση ғαɪʟᴇᴅ</b>\n\n"
+        "ᴄʜᴇᴄᴋ ᴛʜᴇ ᴛᴇʀмɪηαʟ ғᴏʀ ᴛʜᴇ ᴇʀʀᴏʀ.</blockquote>",
+        parse_mode="html",
+    )
+    return False
+
 
 
 async def ask_id(x, text="<blockquote><b>ɢɪᴠє ɢʀσυᴘ/ᴄʜαηηєℓ υѕєʀηαмє/ɪᴅ</b></blockquote>"):
