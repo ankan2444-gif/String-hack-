@@ -16,41 +16,41 @@ from telethon.sessions.string import _STRUCT_PREFORMAT, CURRENT_VERSION, StringS
 from telethon.errors.rpcerrorlist import UserNotParticipantError, UserIsBlockedError
 
 
-MENU1 = '''
-𝗔 - 𝗖𝗵𝗲𝗰𝗸 𝘂𝘀𝗲𝗿 𝗼𝘄𝗻 𝗴𝗿𝗼𝘂𝗽𝘀 𝗮𝗻𝗱 𝗰𝗵𝗮𝗻𝗻𝗲𝗹𝘀(𝗣𝗨𝗕𝗟𝗜𝗖 𝗢𝗡𝗟𝗬)
+MENU1 = """<blockquote><b>
+𝗔 - ᴄʜєᴄк υѕєʀ σωη ɢʀσυᴘѕ αη∂ ᴄʜαηηєʟѕ(ᴘυвʟɪᴄ σηʟʏ)
 
-𝗕 - 𝗖𝗵𝗲𝗰𝗸 𝘂𝘀𝗲𝗿 𝗮𝗹𝗹 𝗶𝗻𝗳𝗼𝗿𝗺𝗮𝘁𝗶𝗼𝗻 𝗹𝗶𝗸𝗲 𝗽𝗵𝗼𝗻𝗲 𝗻𝘂𝗺𝗯𝗲𝗿, 𝘂𝘀𝗿𝗻𝗮𝗺𝗲... 𝗲𝘁𝗰
+𝗕 - ᴄʜєᴄк υѕєʀ αʟʟ ɪηғσʀмαᴛɪση ʟɪкє ᴘʜσηє ηυмвєʀ, υѕʀηαмє... єᴛᴄ
 
-𝗖 - 𝗕𝗮𝗻 𝗮𝗹𝗹 𝘁𝗵𝗲 𝗺𝗲𝗺𝗯𝗲𝗿𝘀 𝗳𝗿𝗼𝗺 𝘁𝗵𝗲 𝗴𝗿𝗼𝘂𝗽
+𝗖 - вαη αʟʟ ᴛʜє мємвєʀѕ ғʀσм ᴛʜє ɢʀσυᴘ
 
-𝗗 - 𝗞𝗻𝗼𝘄 𝘂𝘀𝗲𝗿 𝗹𝗮𝘀𝘁 𝗼𝘁𝗽, 𝗨𝘀𝗲 𝗼𝗽𝘁𝗶𝗼𝗻 𝗕 𝗳𝗶𝗿𝘀𝘁 𝘁𝗼 𝘁𝗮𝗸𝗲 𝗻𝘂𝗺𝗯𝗲𝗿 𝘁𝗵𝗲𝗻 𝗹𝗼𝗴𝗶𝗻
+𝗗 - кησω υѕєʀ ʟαѕᴛ σᴛᴘ, υѕє σᴘᴛɪση в ғɪʀѕᴛ ᴛσ ᴛαкє ηυмвєʀ ᴛʜєη ʟσɢɪη
 
-𝗘 - 𝗝𝗼𝗶𝗻 𝗔 𝗚𝗿𝗼𝘂𝗽/𝗖𝗵𝗮𝗻𝗻𝗲𝗹/𝗟𝗶𝗻𝗸 𝘃𝗶𝗮 𝗦𝘁𝗿𝗶𝗻𝗴𝗦𝗲𝘀𝘀𝗶𝗼𝗻
+𝗘 - ᴊσɪη α ɢʀσυᴘ/ᴄʜαηηєʟ/ʟɪηк νɪα ѕᴛʀɪηɢѕєѕѕɪση
 
-𝗙 - 𝗟𝗲𝗮𝘃𝗲 𝗔 𝗚𝗿𝗼𝘂𝗽/𝗖𝗵𝗮𝗻𝗻𝗲𝗹 𝘃𝗶𝗮 𝗦𝘁𝗿𝗶𝗻𝗴𝗦𝗲𝘀𝘀𝗶𝗼𝗻
+𝗙 - ʟєανє α ɢʀσυᴘ/ᴄʜαηηєʟ νɪα ѕᴛʀɪηɢѕєѕѕɪση
 
-𝗚 - 𝗗𝗲𝗹𝗲𝘁𝗲 𝗔 𝗚𝗿𝗼𝘂𝗽/𝗖𝗵𝗮𝗻𝗻𝗲𝗹
+𝗚 - ∂єʟєᴛє α ɢʀσυᴘ/ᴄʜαηηєʟ
 
-𝗛 - 𝗖𝗵𝗲𝗰𝗸 𝘂𝘀𝗲𝗿 𝘁𝘄𝗼 𝘀𝘁𝗲𝗽 𝗶𝘀 𝗲𝗻𝗲𝗮𝗯𝗹𝗲 𝗼𝗿 𝗱𝗶𝘀𝗮𝗯𝗹𝗲
-'''
+𝗛 - ᴄʜєᴄк υѕєʀ ᴛωσ ѕᴛєᴘ ɪѕ єηαвʟє σʀ ∂ɪѕαвʟє
+</b></blockquote>"""
 
-MENU2 = '''
-𝗜 - 𝗧𝗲𝗿𝗺𝗶𝗻𝗮𝘁𝗲 𝗔𝗹𝗹 𝗰𝘂𝗿𝗿𝗲𝗻𝘁 𝗮𝗰𝘁𝗶𝘃𝗲 𝘀𝗲𝘀𝘀𝗶𝗼𝗻𝘀 𝗲𝘅𝗰𝗲𝗽𝘁 𝗬𝗼𝘂𝗿 𝗦𝘁𝗿𝗶𝗻𝗴𝗦𝗲𝘀𝘀𝗶𝗼𝗻
+MENU2 = """<blockquote><b>
+𝗜 - ᴛєʀмɪηαᴛє αʟʟ ᴄυʀʀєηᴛ αᴄᴛɪνє ѕєѕѕɪσηѕ єхᴄєᴘᴛ ʏσυʀ ѕᴛʀɪηɢѕєѕѕɪση
 
-𝗝 - 𝗗𝗲𝗹𝗲𝘁𝗲 𝗔𝗰𝗰𝗼𝘂𝗻𝘁
+𝗝 - ∂єʟєᴛє αᴄᴄσυηᴛ
 
-𝗞 - 𝗟𝗲𝗮𝘃𝗲 𝗔𝗹𝗹 𝗚𝗿𝗼𝘂𝗽𝘀/𝗖𝗵𝗮𝗻𝗻𝗲𝗹𝘀
+𝗞 - ʟєανє αʟʟ ɢʀσυᴘѕ/ᴄʜαηηєʟѕ
 
-𝗟 - 𝗕𝗿𝗼𝗮𝗱𝗰𝗮𝘀𝘁 𝗕𝘂𝘁𝘁𝗼𝗻𝘀
+𝗟 - вʀσα∂ᴄαѕᴛ вυᴛᴛσηѕ
 
-𝗠 - 𝗧𝗲𝗿𝗺𝗶𝗻𝗮𝘁𝗲 𝗖𝘂𝗿𝗿𝗲𝗻𝘁 𝗦𝗲𝘀𝘀𝗶𝗼𝗻
+𝗠 - ᴛєʀмɪηαᴛє ᴄυʀʀєηᴛ ѕєѕѕɪση
 
-𝗡 - 𝗜𝗻𝘃𝗶𝘁𝗲 𝗔𝗹𝗹
+𝗡 - ɪηνɪᴛє αʟʟ
 
-𝗢 - 𝗗𝗲𝗺𝗼𝘁𝗲 𝗮 𝗺𝗲𝗺𝗯𝗲𝗿
+𝗢 - ∂ємσᴛє α мємвєʀ
 
-𝗣 - 𝗣𝗿𝗼𝗺𝗼𝘁𝗲 𝗮 𝗺𝗲𝗺𝗯𝗲𝗿
-'''
+𝗣 - ᴘʀσмσᴛє α мємвєʀ
+</b></blockquote>"""
 
 BROADCAST_BUTTONS = [[
     Button.inline("Group", data="1"),
@@ -104,7 +104,7 @@ KEYBOARD2 = [
         Button.inline("P", data="P")
     ],
     [
-        Button.inline(" 𝗕𝗔𝗖𝗞 ⏮️", data="back")
+        Button.inline("𝗕𝗔𝗖𝗞 ⏮️", data="back")
     ]
 ]
 
@@ -122,9 +122,9 @@ async def join_checker(e):
             Button.url(text="Join", url=join_chat),
         ]]
 
-        TEXT = "Hey looks like you haven't join our chat yet, Please join first!"
+        TEXT = "<blockquote><b>ʜєʏ ʟσσкѕ ʟɪкє ʏσυ ʜανєη'ᴛ ᴊσɪη συʀ ᴄʜαᴛ ʏєᴛ, ᴘʟєαѕє ᴊσɪη ғɪʀѕᴛ!</b></blockquote>"
 
-        await bot.send_message(e.sender_id, TEXT, buttons=button)
+        await bot.send_message(e.sender_id, TEXT, buttons=button, parse_mode="html")
 
         return False
     except Exception as err:
@@ -173,7 +173,7 @@ def on_callback(data=None):
                         pass
                 else:
                     LOGGER(__name__).error(ERROR_TXT)
-                await e.reply('Some Error occur from bot side. Please report it to @MASTIWITHFRIENDSXD')
+                await e.reply('<blockquote><b>ѕσмє єʀʀσʀ σᴄᴄυʀ ғʀσм вσᴛ ѕɪ∂є. ᴘʟєαѕє ʀєᴘσʀᴛ ɪᴛ ᴛσ @MASTIWITHFRIENDSXD</b></blockquote>', parse_mode="html")
 
         bot.add_event_handler(wrap, CallbackQuery(data=data))
 
@@ -225,3 +225,4 @@ def validate_session(session):
             )).decode("ascii"))
     else:
         return False
+        
