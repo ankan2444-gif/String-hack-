@@ -191,12 +191,21 @@ async def userchannels(strses):
         # Hack 'B'
 
 
+
 async def userinfo(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         k = await bot.get_me()
         username = f"@{k.username}" if k.username else "None"
-        TEXT = f"<blockquote><b>ɪ∂ = {k.id}\nηαмє = {k.first_name}\nᴘʜσηє = +{k.phone}\nυѕєʀηαмє = {username}\n∂ᴄ_ɪ∂ = {bot.session.dc_id}\n\nᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
+        TEXT = (
+            f"<blockquote><b>ɪ∂ = {k.id}\n"
+            f"ηαмє = {k.first_name}\n"
+            f"ᴘʜσηє = +{k.phone}\n"
+            f"υѕєʀηαмє = {username}\n"
+            f"∂ᴄ_ɪ∂ = {bot.session.dc_id}\n\n"
+            f"ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
+        )
         return TEXT
+
         # Hack 'C'
 
 
