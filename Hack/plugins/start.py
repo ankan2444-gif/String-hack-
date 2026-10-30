@@ -18,10 +18,10 @@ SUPPORT_LINK = "https://t.me/lynx_madara"
 DEVELOPER_LINK = "https://t.me/seximadara"
 
 WELCOME_BUTTONS = [
-    [Button.inline("⚡ HACK", data=b"show_hack")],
+    [Button.inline("ʜαᴄκ ѕєѕѕɪση", data=b"show_hack")],
     [
-        Button.url("SUPPORT", SUPPORT_LINK),
-        Button.url("DEVELOPER", DEVELOPER_LINK),
+        Button.url("ѕυᴘᴘσʀᴛ", SUPPORT_LINK),
+        Button.url("∂єᴠєʟσᴘєʀ", DEVELOPER_LINK),
     ],
 ]
 
@@ -124,7 +124,7 @@ def _welcome_text(user):
         "<emoji id=6177168011175138815>💎</emoji> ʜєʏ " + name + " ! "
         "<emoji id=6294262456185265300>😽</emoji>\n\n"
         "<emoji id=5978869985299142389>🦋</emoji> ᴡєʟᴄσϻє ᴛσ "
-        "<b>𝐒ᴛʀɪɴɢ 𝐇ᴀᴄᴋ ꭙ 𝐁ᴏᴛ ⚡</b> "
+        "𝐒ᴛʀɪɴɢ 𝐇ᴀᴄᴋ ꭙ 𝐁ᴏᴛ ⚡ "
         "<emoji id=6073117703965511893>💐</emoji>\n"
         "ᴘʀєϻɪυϻ • ғαѕᴛ • ѕϻσσᴛʜ\n\n"
         "<emoji id=5411472846645914012>🎁</emoji> "
