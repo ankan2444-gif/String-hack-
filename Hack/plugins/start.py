@@ -1,10 +1,19 @@
 import asyncio
 import random
 import html
+import os
+import tempfile
+import aiohttp
 
 from telethon import events, Button
-from telethon.tl.functions.messages import SendReactionRequest
-from telethon.tl.types import ReactionEmoji
+from telethon.tl.functions.messages import (
+    SendReactionRequest,
+    SendMediaRequest,
+)
+from telethon.tl.types import (
+    ReactionEmoji,
+    InputMediaUploadedPhoto,
+)
 
 import env
 from Hack import bot
@@ -152,14 +161,43 @@ async def start(event):
     welcome = _welcome_text(sender)
 
     try:
-        await bot.send_file(
-            event.chat_id,
-            PHOTO_URL,
-            caption=welcome,
-            parse_mode="html",
-            spoiler=True,
-            buttons=WELCOME_BUTTONS,
-        )
+        async with aiohttp.ClientSession() as session:
+            async with session.get(PHOTO_URL) as response:
+                response.raise_for_status()
+                photo_data = await response.read()
+
+        with tempfile.NamedTemporaryFile(
+            suffix=".jpg",
+            delete=False,
+        ) as temp:
+            temp.write(photo_data)
+            photo_path = temp.name
+
+        try:
+            uploaded = await bot.upload_file(photo_path)
+
+            media = InputMediaUploadedPhoto(
+                file=uploaded,
+                spoiler=True,
+            )
+
+            caption, entities = await bot._parse_message_text(
+                welcome,
+                "html",
+            )
+
+            await bot(
+                SendMediaRequest(
+                    peer=await event.get_input_chat(),
+                    media=media,
+                    message=caption,
+                    entities=entities,
+                    reply_markup=bot.build_reply_markup(WELCOME_BUTTONS),
+                )
+            )
+        finally:
+            os.unlink(photo_path)
+
     except Exception:
         await event.reply(
             welcome,
