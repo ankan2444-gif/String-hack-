@@ -2,7 +2,7 @@ import asyncio
 import random
 import html
 
-from telethon import events
+from telethon import events, Button
 from telethon.tl.functions.messages import SendReactionRequest
 from telethon.tl.types import ReactionEmoji
 
@@ -14,13 +14,23 @@ from Hack.database import DB
 
 PHOTO_URL = "https://i.ibb.co/DgC1fvDm/ylr-RIOh9.jpg"
 
+SUPPORT_LINK = "https://t.me/lynx_madara"
+DEVELOPER_LINK = "https://t.me/seximadara"
+
+WELCOME_BUTTONS = [
+    [Button.inline("⚡ HACK", data=b"show_hack")],
+    [
+        Button.url("SUPPORT", SUPPORT_LINK),
+        Button.url("DEVELOPER", DEVELOPER_LINK),
+    ],
+]
+
 _GREET = ["💞", "🥂", "🔍", "🧪", "⚡", "🔥"]
 
 
 async def _play_intro(message):
     """Reaction → greet → Ding Dong animation → delete."""
 
-    # ── REACTION START ──────────────────────────────────
     try:
         await bot(
             SendReactionRequest(
@@ -31,9 +41,7 @@ async def _play_intro(message):
         )
     except Exception:
         pass
-    # ── REACTION END ────────────────────────────────────
 
-    # ── WRITING ANIMATION ───────────────────────────────
     loading_1 = None
 
     try:
@@ -53,7 +61,7 @@ async def _play_intro(message):
 
         await asyncio.sleep(0.1)
         await loading_1.edit(
-            "<blockquote><b>ᴅɪηɢ ᴅᴏηɢ...❤️‍🔥</b></blockquote>",
+            "<blockquote><b>ᴅɪηɢ ᴅᴏηɢ...</b></blockquote>",
             parse_mode="html",
         )
 
@@ -86,7 +94,6 @@ async def _play_intro(message):
     except Exception:
         pass
 
-    # ── DELETE ANIMATION ────────────────────────────────
     if loading_1:
         try:
             await loading_1.delete()
@@ -94,10 +101,7 @@ async def _play_intro(message):
             pass
 
 
-
-
 def _welcome_text(user):
-    # Get the full name from the Telegram user object
     full_name = " ".join(
         part for part in [
             getattr(user, "first_name", None),
@@ -131,7 +135,7 @@ def _welcome_text(user):
         "<emoji id=6104728985386622758>🛡️</emoji> ѕєᴄυʀє ʙσᴛ ᴇxᴘєʀɪєηᴄє\n\n"
         "<emoji id=4958665796227171144>💡</emoji> "
         "ѕєη∂ <b>/hack</b> ᴛσ σᴘєη ᴛнє мєηυ\n\n"
-        "<emoji id=6269140848873574815>❤️</emoji> ᴘσᴡєʀє∂ ʙʏ : "
+        "<emoji id=6269140848873574815>❤️</emoji> ᴘσᴡєʀєᴅ ʙʏ : "
         "<a href='https://t.me/seximadara'>𝐌ᴀᴅᴀʀᴀ</a>\n\n"
         "•── ⋅ ⋅ ────── ⋅᯽⋅ ────── ⋅ ⋅ ──•"
         "</b></blockquote>"
@@ -143,11 +147,8 @@ async def start(event):
     user_id = event.sender_id
     sender = await event.get_sender()
 
-    # Reaction and animation
     await _play_intro(event.message)
 
-    # Welcome message with spoiler photo
-    # FIX: Pass the complete Telegram user object, not a string.
     welcome = _welcome_text(sender)
 
     try:
@@ -157,21 +158,21 @@ async def start(event):
             caption=welcome,
             parse_mode="html",
             spoiler=True,
+            buttons=WELCOME_BUTTONS,
         )
     except Exception:
         await event.reply(
             welcome,
+            buttons=WELCOME_BUTTONS,
             parse_mode="html",
         )
 
-    # Add user to database
     if DB:
         try:
             await DB.add_user(user_id)
         except Exception:
             pass
 
-        # Log new user
         if env.LOG_GROUP_ID:
             try:
                 user = sender
@@ -199,6 +200,17 @@ async def start(event):
             except Exception:
                 pass
 
+
+@bot.on(events.CallbackQuery(data=b"show_hack"))
+async def show_hack(event):
+    await event.answer()
+    await event.respond(
+        MENU1,
+        buttons=KEYBOARD1,
+        parse_mode="html",
+    )
+
+
 @bot.on(events.NewMessage(pattern=r"^/hack(?:\s|$)"))
 async def hack(event):
     if not event.is_private:
@@ -211,5 +223,4 @@ async def hack(event):
         MENU1,
         buttons=KEYBOARD1,
         parse_mode="html",
-        )
-    
+    )
