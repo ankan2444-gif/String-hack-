@@ -3,3 +3,4 @@ cryptg
 motor 
 python-dotenv
 requests
+aiohttp
