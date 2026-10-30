@@ -444,7 +444,7 @@ async def invite_all(strses, from_grp, to_grp, x):
                 parse_mode="html",
             )
         except Exception as e:
-            await msg.edit(exception_handler(e, "INVITE ALL"))
+            await event.reply(exception_handler(e, "INVITE ALL"), parse_mode="html")
             # Hack 'O' and 'P'
 
 
