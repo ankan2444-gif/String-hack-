@@ -406,7 +406,7 @@ async def logout(strses):
 
 
 async def get_members(strses, grp_id):
-    async with tg(strses, env.API_ID, env.API_HASH, parse_mode="html") as bot:
+    async with tg(strses, env.API_ID, env.API_HASH) as bot:
         members = []
         for users in await bot.get_participants(grp_id):
             if not users.bot:
